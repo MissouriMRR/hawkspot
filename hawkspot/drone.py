@@ -1,6 +1,5 @@
 import logging
 import math
-import time
 
 import dronekit
 from pymavlink import mavutil
@@ -29,10 +28,9 @@ class Drone:
             0,
             0,  # yaw, yaw_rate (ignored)
         )
-        # self.vehicle.send_mavlink(msg)
 
     def set_yaw(self, yaw: float):
-        msg = self.vehicle.message_factory.set_attitude_target_encode(
+        self.vehicle.message_factory.set_attitude_target_send(
             0,  # time_boot_ms
             self.vehicle._master.target_system,  # Target system
             self.vehicle._master.target_component,  # Target component
@@ -43,7 +41,6 @@ class Drone:
             10,  # Body yaw rate in radian/second
             0.5,  # Thrust
         )
-        self.vehicle.send_mavlink(msg)
 
     def send_landing_target(self, x: float, y: float):
         if not self.vehicle.location.global_relative_frame.alt:
@@ -52,7 +49,7 @@ class Drone:
         z = self.vehicle.location.global_relative_frame.alt
         distance = math.sqrt(x**2 + y**2 + z**2)
 
-        msg = self.vehicle.message_factory.landing_target_encode(
+        self.vehicle.message_factory.landing_target_send(
             0,  # time target data was processed, as close to sensor capture as possible
             self.vehicle._master.target_system,  # target num, not used
             mavutil.mavlink.MAV_FRAME_BODY_FRD,  # ty: ignore[unresolved-attribute]  # frame, not used
@@ -73,8 +70,6 @@ class Drone:
             3,  # visual marker
             1,  # position_valid
         )
-        self.vehicle.send_mavlink(msg)
-        time.sleep(0.05)
 
     def to_quaternion(self, roll=0.0, pitch=0.0, yaw=0.0):
         """

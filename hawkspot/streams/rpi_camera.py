@@ -10,7 +10,7 @@ except ImportError as exc:
         "but if not, install it with: pip install picamera2"
     ) from exc
 
-from tracking import BaseStream
+from hawkspot import BaseStream
 
 
 class RPICamera(BaseStream):

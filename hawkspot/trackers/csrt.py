@@ -5,7 +5,7 @@ Includes the CSRTTracker class, which uses the CSRT tracker from OpenCV to track
 import cv2
 from cv2.typing import MatLike
 
-from tracking import BaseTracker, BoundingBox
+from hawkspot import BaseTracker, BoundingBox, DetectionOffset
 
 
 class CSRTTracker(BaseTracker):
@@ -21,8 +21,9 @@ class CSRTTracker(BaseTracker):
         self.roi = roi.to_rect()
         self.tracker.init(image, roi.to_rect())
 
-    def track(self, image: MatLike) -> BoundingBox:
+    def track(self, image: MatLike) -> DetectionOffset:
         success, roi = self.tracker.update(image)
         if success:
-            return BoundingBox(*roi)
+            bbox = BoundingBox(*roi)
+            return DetectionOffset(bbox, *bbox.offset(image))
         raise ValueError("Tracking failed")

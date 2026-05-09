@@ -16,7 +16,7 @@ from typing import Optional
 from cv2 import VideoCapture  # pylint: disable=no-name-in-module
 from cv2.typing import MatLike
 
-from tracking import BaseStream
+from hawkspot import BaseStream
 
 
 class SIYICamera(BaseStream):
