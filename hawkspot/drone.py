@@ -10,6 +10,7 @@ class Drone:
         self.vehicle = vehicle
 
     def goto_local(self, point: dronekit.LocationLocal):
+        logging.info("Going to point: north=%s, east=%s", point.north, point.east)
         self.vehicle._master.mav.set_position_target_local_ned_send(
             0,  # time_boot_ms (not used)
             self.vehicle._master.target_system,  # target_system
