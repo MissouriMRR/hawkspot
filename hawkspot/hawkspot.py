@@ -146,7 +146,8 @@ class Hawkspot:
                         logging.info("Drone disarmed, we assume it landed.")
                         return True
                     else:
-                        self.drone.vehicle.simple_goto(self.estimatedLocation.lat,self.estimatedLocation.long,self.drone.vehicle.location.global_relative_frame.alt)
+                        if(self.estimatedLocation!=None):
+                            self.drone.vehicle.simple_goto(self.estimatedLocation.lat,self.estimatedLocation.long,self.drone.vehicle.location.global_relative_frame.alt)
                         
 
                 offset.yaw += self.params.yaw_offset
