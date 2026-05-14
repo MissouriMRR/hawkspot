@@ -23,6 +23,9 @@ class HawkspotParams:
     # The right offset in meters from the camera to the center of the drone
     right_offset: float = 0.0
 
+    # The yaw offset from the orientation of the detection to the orientation of the drone in degrees. Positive values indicate the drone is rotated clockwise from the target, and negative values indicate the drone is rotated counterclockwise from the target.
+    yaw_offset: float = 0.0
+
     # Camera focal length in millimeters
     camera_focal_length: float = 35.0
 
@@ -130,6 +133,7 @@ class Hawkspot:
         ):
             try:
                 offset = self._get_next_offset()
+                offset.yaw += self.params.yaw_offset
                 logging.debug(
                     f"offset | forward={offset.forward}, right={offset.right}, delta={offset.distance}, yaw={offset.yaw}"
                 )
@@ -174,7 +178,7 @@ class Hawkspot:
                         f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
                     )
                     self.drone.set_yaw(
-                        cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw
+                        cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
                     )
 
             except ValueError:
