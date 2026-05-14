@@ -134,7 +134,7 @@ class Hawkspot:
             try:
                 offset = self._get_next_offset()
                 offset.yaw += self.params.yaw_offset
-                logging.debug(
+                logging.info(
                     f"offset | forward={offset.forward}, right={offset.right}, delta={offset.distance}, yaw={offset.yaw}"
                 )
 
@@ -142,7 +142,7 @@ class Hawkspot:
                 if last_delta is not None and (offset.distance - last_delta) > 1:
                     misdirection += abs(offset.distance - last_delta)
                     if misdirection >= self.params.misdirection_threshold:
-                        logging.debug(f"Misdirection: {misdirection}")
+                        logging.info(f"Misdirection: {misdirection}")
                         # We want to reset the tracker if there is one
                         self._tracker_init = False
 

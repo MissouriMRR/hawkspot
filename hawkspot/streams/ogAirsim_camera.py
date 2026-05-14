@@ -23,7 +23,7 @@ class AirsimCamera(BaseStream):
         self._client.confirmConnection()
 
     def get_frame(self):
-        self.frame = self._client.simGetImage("bottom_center", airsim.ImageType.Scene)
+        self.frame = self._client.simGetImage("0", airsim.ImageType.Scene)
         #self.frame = self._camera.capture_array()
         super().show_frame()
         return self.frame
