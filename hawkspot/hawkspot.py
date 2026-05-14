@@ -176,7 +176,7 @@ class Hawkspot:
                     f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
                     )
                     self.drone.set_yaw(
-                    cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
+                    offset.yaw, self.params.yaw_threshold
                     )
 
                 # Send LANDING_TARGET message
