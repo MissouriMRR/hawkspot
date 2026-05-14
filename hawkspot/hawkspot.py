@@ -154,7 +154,9 @@ class Hawkspot:
                         if offset.yaw is not None
                         else True
                     )
+
                     acceptable_offset = offset.distance < self.params.offset_threshold
+                    print(f"acceptable_yaw={acceptable_yaw}, acceptable_offset={acceptable_offset}, not landing={not landing}")
                     if acceptable_yaw and acceptable_offset and not landing:
                         target_samples += 1
                         if target_samples >= self.params.target_threshold:
