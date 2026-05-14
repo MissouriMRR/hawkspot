@@ -4,7 +4,7 @@ import math
 
 import dronekit
 from pymavlink import mavutil
-
+import time
 
 class Drone:
     def __init__(self, vehicle: dronekit.Vehicle):
@@ -33,27 +33,58 @@ class Drone:
             0,  # yaw, yaw_rate (ignored)
         )
 
-    def set_yaw(self, goal_yaw: float, yaw_threshold: float):
-        
-        current_yaw: float = cast(float, self.vehicle.attitude.yaw)
-    
-        while abs(goal_yaw - current_yaw) >= yaw_threshold:
-            current_yaw: float = cast(float, self.vehicle.attitude.yaw)
-            logging.info(
-                f"yaw | offset={goal_yaw}, current={current_yaw}"
-            )
 
-            self.vehicle.message_factory.set_attitude_target_send(
-                0,  # time_boot_ms
-                self.vehicle._master.target_system,  # Target system
-                self.vehicle._master.target_component,  # Target component
-                0b00000111,
-                goal_yaw,
-                0,  # Body roll rate in radian
-                0,  # Body pitch rate in radian
-                10,  # Body yaw rate in radian/second
-                0.5,  # Thrust
-            )
+
+    def set_relative_yaw_and_wait(
+        self,
+        yaw_change_deg,
+        angular_speed_deg_s=30,
+        tolerance_deg=2.0,
+        timeout=15.0,
+    ):
+        """
+        Rotate the vehicle by a relative yaw amount and block until reached.
+
+        yaw_change_deg:      degrees to rotate (positive = clockwise,
+                            negative = counter-clockwise)
+        angular_speed_deg_s: rotation speed (deg/s)
+        tolerance_deg:       how close to target before considered "reached"
+        timeout:             max seconds to wait before giving up
+
+        Returns True if yaw reached, False if timed out.
+        """
+        # MAV_CMD_CONDITION_YAW needs a positive magnitude + direction flag
+        direction = 1 if yaw_change_deg >= 0 else -1
+        magnitude = abs(yaw_change_deg)
+
+        # Compute absolute target for the wait loop
+        current_yaw_deg = math.degrees(self.vehicle.attitude.yaw) % 360
+        absolute_target = (current_yaw_deg + yaw_change_deg) % 360
+
+        # Send MAV_CMD_CONDITION_YAW
+        msg = self.vehicle.message_factory.command_long_encode(
+            0, 0,                                       # target system, component
+            mavutil.mavlink.MAV_CMD_CONDITION_YAW,      # command id
+            0,                                          # confirmation
+            magnitude,                                  # param 1: angle (deg)
+            angular_speed_deg_s,                        # param 2: angular speed
+            direction,                                  # param 3: 1=CW, -1=CCW
+            1,                                          # param 4: 1=relative
+            0, 0, 0,                                    # params 5-7 unused
+        )
+        self.vehicle.send_mavlink(msg)
+
+        # Block until heading is within tolerance, or timeout
+        start = time.time()
+        while time.time() - start < timeout:
+            current = math.degrees(self.vehicle.attitude.yaw) % 360
+            # Shortest angular distance, handles 0/360 wrap-around
+            error = abs((current - absolute_target + 180) % 360 - 180)
+            if error <= tolerance_deg:
+                return True
+            time.sleep(0.1)
+
+        return False
         
 
     def send_landing_target(self, x: float, y: float):

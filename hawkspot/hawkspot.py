@@ -177,9 +177,9 @@ class Hawkspot:
                     logging.debug(
                     f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
                     )
-                    self.drone.set_yaw(
-                    offset.yaw, self.params.yaw_threshold
-                    )
+                    self.drone.set_relative_yaw_and_wait(offset.yaw)
+               
+                    
 
                 # Send LANDING_TARGET message
                 self.drone.send_landing_target(offset.right, offset.forward)
