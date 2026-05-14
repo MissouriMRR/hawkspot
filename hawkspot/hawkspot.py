@@ -34,7 +34,7 @@ class HawkspotParams:
 
     # Maximum distance in meters the drone can be from the target
     # and still be considered on the target
-    offset_threshold: float = 0.05
+    offset_threshold: float = 0.1
 
     # Maximum yaw offset in radians the drone can be off from the target to be considered acceptable
     yaw_threshold: float = 0.1
@@ -62,13 +62,14 @@ class Hawkspot:
         detector: BaseDetector,
         tracker: Optional[BaseTracker] = None,
         params: HawkspotParams = HawkspotParams(),
+        estimatedLocation = None
     ):
         self.drone = drone
         self.stream = stream
         self.detector = detector
         self.tracker = tracker
         self.params = params
-
+        self.estimatedLocation=None
         self._tracker_init = False
 
     def _calculate_offset(
@@ -105,6 +106,7 @@ class Hawkspot:
         return LocalOffset(r_NED[0] * t, r_NED[1] * t, offset.yaw)
 
     def _get_next_offset(self) -> LocalOffset:
+        noDetectionCount=0
         for frame in self.stream:
             if self.tracker is None or not self._tracker_init:
                 detection = self.detector.detect(frame)
@@ -113,7 +115,13 @@ class Hawkspot:
                         self.tracker.start_tracking(frame, detection.bbox)
                         self._tracker_init = True
                     return self._calculate_offset(detection, frame.shape)
-
+                else:
+                    noDetectionCount+=1
+                    logging.info(f"No detection found in frame. No detection count: {noDetectionCount}")
+                    if noDetectionCount>20:
+                        logging.info("No detections for 10 frames, resetting tracker.")
+                        self._tracker_init = False
+                        return False
             else:
                 result = self.tracker.track(frame)
                 if result is not None:
@@ -133,6 +141,14 @@ class Hawkspot:
         ):
             try:
                 offset = self._get_next_offset()
+                if offset is False:
+                    if(not self.drone.vehicle.armed):
+                        logging.info("Drone disarmed, we assume it landed.")
+                        return True
+                    else:
+                        self.drone.vehicle.simple_goto(self.estimatedLocation.lat,self.estimatedLocation.long,self.drone.vehicle.location.global_relative_frame.alt)
+                        
+
                 offset.yaw += self.params.yaw_offset
                 logging.info(
                     f"offset | forward={offset.forward}, right={offset.right}, delta={offset.distance}, yaw={offset.yaw}"
@@ -188,9 +204,7 @@ class Hawkspot:
                 
 
                 
-                if(not self.drone.vehicle.armed):
-                    logging.info("Drone disarmed, we assume it landed.")
-                    return True
+
 
             except ValueError:
                 return False
