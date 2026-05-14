@@ -164,11 +164,12 @@ class Hawkspot:
                     misdirection = 0
                 last_delta = offset.distance
 
+                """
                 # Start moving to point
                 if not landing:
                     point = dronekit.LocationLocal(offset.forward, offset.right, 0)
                     self.drone.goto_local(point)
-                    
+                """
 
                 # Send LANDING_TARGET message
                 self.drone.send_landing_target(offset.right, offset.forward)
