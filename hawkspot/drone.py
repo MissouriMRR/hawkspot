@@ -10,12 +10,14 @@ class Drone:
         self.vehicle = vehicle
 
     def goto_local(self, point: dronekit.LocationLocal):
+        #current_yaw = self.vehicle.attitude.yaw  # radians, already in NED frame
+
         self.vehicle._master.mav.set_position_target_local_ned_send(
             0,  # time_boot_ms (not used)
             self.vehicle._master.target_system,  # target_system
             self.vehicle._master.target_component,  # target_component
             mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,  # ty: ignore[unresolved-attribute]  # frame
-            0b0101111111111000,  # type_mask (only positions enabled)
+            0b0000101111111000,  # type_mask (only positions enabled)
             point.north,
             point.east,
             0,  # x, y, z positions in meters (NED: negative z is up)
