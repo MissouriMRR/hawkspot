@@ -176,6 +176,7 @@ class Hawkspot:
                 self.drone.send_landing_target(offset.right, offset.forward)
 
                 # Adjust yaw if necessary
+                """
                 if offset.yaw is not None:
                     logging.debug(
                         f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
@@ -183,6 +184,7 @@ class Hawkspot:
                     self.drone.set_yaw(
                         cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
                     )
+                """
                 if(not self.drone.vehicle.armed):
                     logging.info("Drone disarmed, we assume it landed.")
                     return True
