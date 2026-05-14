@@ -27,11 +27,13 @@ class Drone:
             0,
             0,
             0,  # afx, afy, afz (ignored)
-            0,
+            self.yaw,
             0,  # yaw, yaw_rate (ignored)
         )
 
     def set_yaw(self, yaw: float):
+        self.yaw=yaw
+        """
         self.vehicle.message_factory.set_attitude_target_send(
             0,  # time_boot_ms
             self.vehicle._master.target_system,  # Target system
@@ -43,6 +45,7 @@ class Drone:
             10,  # Body yaw rate in radian/second
             0.5,  # Thrust
         )
+        """
 
     def send_landing_target(self, x: float, y: float):
         if not self.vehicle.location.global_relative_frame.alt:
