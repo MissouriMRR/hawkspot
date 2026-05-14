@@ -1,3 +1,4 @@
+from ctypes import cast
 import logging
 import math
 
@@ -28,25 +29,32 @@ class Drone:
             0,
             0,
             0,  # afx, afy, afz (ignored)
-            self.yaw,
+            0,
             0,  # yaw, yaw_rate (ignored)
         )
 
-    def set_yaw(self, yaw: float):
-        self.yaw=yaw
-        """
-        self.vehicle.message_factory.set_attitude_target_send(
-            0,  # time_boot_ms
-            self.vehicle._master.target_system,  # Target system
-            self.vehicle._master.target_component,  # Target component
-            0b00000111,
-            self.to_quaternion(yaw=yaw),  # Quaternion
-            0,  # Body roll rate in radian
-            0,  # Body pitch rate in radian
-            10,  # Body yaw rate in radian/second
-            0.5,  # Thrust
-        )
-        """
+    def set_yaw(self, goal_yaw: float, yaw_threshold: float):
+        
+        current_yaw: float = cast(float, self.drone.vehicle.attitude.yaw)
+        if(abs(goal_yaw - current_yaw) < yaw_threshold):
+            while abs(goal_yaw - current_yaw) >= yaw_threshold:
+                current_yaw: float = cast(float, self.drone.vehicle.attitude.yaw)
+                logging.debug(
+                    f"yaw | offset={goal_yaw}, current={current_yaw}"
+                )
+
+                self.vehicle.message_factory.set_attitude_target_send(
+                    0,  # time_boot_ms
+                    self.vehicle._master.target_system,  # Target system
+                    self.vehicle._master.target_component,  # Target component
+                    0b00000111,
+                    self.to_quaternion(yaw=goal_yaw),  # Quaternion
+                    0,  # Body roll rate in radian
+                    0,  # Body pitch rate in radian
+                    10,  # Body yaw rate in radian/second
+                    0.5,  # Thrust
+                )
+        
 
     def send_landing_target(self, x: float, y: float):
         if not self.vehicle.location.global_relative_frame.alt:

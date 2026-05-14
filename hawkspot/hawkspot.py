@@ -171,13 +171,13 @@ class Hawkspot:
                     
                     self.drone.goto_local(point)
                 
-                    if offset.yaw is not None:
-                        logging.debug(
-                        f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
-                        )
-                        self.drone.set_yaw(
-                        cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
-                        )
+                if offset.yaw is not None:
+                    logging.debug(
+                    f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
+                    )
+                    self.drone.set_yaw(
+                    cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
+                    )
 
                 # Send LANDING_TARGET message
                 self.drone.send_landing_target(offset.right, offset.forward)
