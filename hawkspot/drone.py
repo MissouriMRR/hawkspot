@@ -1,4 +1,4 @@
-from ctypes import cast
+from typing import Optional, cast
 import logging
 import math
 
