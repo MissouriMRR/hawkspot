@@ -45,10 +45,10 @@ class HawkspotParams:
 
     # Maximum continous misdirection in meters before the drone considers
     # the target lost and must search for it again
-    misdirection_threshold: float = 0.5
+    misdirection_threshold: float = 0.25
 
     # Altitude in meters to start going straight down
-    land_decision_altitude: float = 1.0
+    land_decision_altitude: float = 0.5
 
     # Show live view of the drone's camera feed and detections
     show_stream: bool = False
@@ -176,7 +176,7 @@ class Hawkspot:
                 self.drone.send_landing_target(offset.right, offset.forward)
 
                 # Adjust yaw if necessary
-                """
+                
                 if offset.yaw is not None:
                     logging.debug(
                         f"yaw | offset={offset.yaw}, current={self.drone.vehicle.attitude.yaw}"
@@ -184,7 +184,7 @@ class Hawkspot:
                     self.drone.set_yaw(
                         cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
                     )
-                """
+                
                 if(not self.drone.vehicle.armed):
                     logging.info("Drone disarmed, we assume it landed.")
                     return True
