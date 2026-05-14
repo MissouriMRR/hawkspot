@@ -1,3 +1,5 @@
+import platform
+
 from hawkspot.base import (
     BaseDetector,
     BaseStream,
@@ -9,7 +11,10 @@ from hawkspot.base import (
 from hawkspot.detectors.april_tag import AprilTagDetector
 from hawkspot.detectors.rt_detr import RTDETRV2_Detector 
 from hawkspot.streams.ogAirsim_camera import AirsimCamera
-from hawkspot.streams.rpi_camera import RPICamera
+current_os = platform.system()
+if current_os == "Linux":
+    from hawkspot.streams.rpi_camera import RPICamera
+
 from hawkspot.streams.siyi_camera import SiyiCamera
 from hawkspot.detectors.april_tag import AprilTagDetector
 from hawkspot.drone import Drone
