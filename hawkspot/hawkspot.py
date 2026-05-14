@@ -199,8 +199,8 @@ class Hawkspot:
         result = False
         while not result:
             result = self._track_object(False)
-            print("here")
-        print(f"Object found @ {self.drone.vehicle.location.global_frame}, landing...")
+            logging.info("_______________here______________________")
+        logging.info(f"Object found @ {self.drone.vehicle.location.global_frame}, landing...")
         self.drone.vehicle.mode = dronekit.VehicleMode("LAND")
         self.drone.vehicle.wait_for_mode("LAND")
         self._track_object(True)
