@@ -23,7 +23,7 @@ class HawkspotParams:
     # The right offset in meters from the camera to the center of the drone
     right_offset: float = 0.0
 
-    # The yaw offset from the orientation of the detection to the orientation of the drone in degrees. Positive values indicate the drone is rotated clockwise from the target, and negative values indicate the drone is rotated counterclockwise from the target.
+    # The yaw offset from the orientation of the detection to the orientation of the drone in radians. Positive values indicate the drone is rotated clockwise from the target, and negative values indicate the drone is rotated counterclockwise from the target.
     yaw_offset: float = 0.0
 
     # Camera focal length in millimeters
@@ -36,8 +36,8 @@ class HawkspotParams:
     # and still be considered on the target
     offset_threshold: float = 0.05
 
-    # Maximum yaw offset in degrees the drone can be off from the target to be considered acceptable
-    yaw_threshold: float = 0.0
+    # Maximum yaw offset in radians the drone can be off from the target to be considered acceptable
+    yaw_threshold: float = 0.1
 
     # Number of consecutive frames the drone must be on the target
     # before it is considered to have reached the target
@@ -168,7 +168,7 @@ class Hawkspot:
                 if not landing:
                     point = dronekit.LocationLocal(offset.forward, offset.right, 0)
                     self.drone.goto_local(point)
-                    return True
+                    
 
                 # Send LANDING_TARGET message
                 self.drone.send_landing_target(offset.right, offset.forward)
