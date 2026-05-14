@@ -181,6 +181,9 @@ class Hawkspot:
                     self.drone.set_yaw(
                         cast(float, self.drone.vehicle.attitude.yaw) + offset.yaw 
                     )
+                if(not self.drone.vehicle.armed):
+                    logging.info("Drone disarmed, we assume it landed.")
+                    return True
 
             except ValueError:
                 return False
