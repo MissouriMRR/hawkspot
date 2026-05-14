@@ -3,11 +3,12 @@ name = "hawkspot"
 version = "0.0.2"
 description = "Tracking objects using MAVLink"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = "==3.12.*"
 dependencies = [
     "dronekit @ https://github.com/MissouriMRR/docs/raw/refs/heads/main/subteams/flight/installation_guide/dronekit-2.9.2-py310-none-any.whl",
     "future>=1.0.0",
-    "opencv-contrib-python>=4.13.0.92"
+    "opencv-contrib-python>=4.13.0.92",
+    "pupil-apriltags",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -15,6 +16,14 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICENSE"]
+[tool.uv]
+environments = [
+    "sys_platform == 'linux'",
+    "sys_platform == 'win32'",
+]
+override-dependencies = [
+    "python-prctl ; sys_platform == 'never'",
+]
 
 [build-system]
 requires = ["setuptools >= 82.0.1"]
@@ -24,8 +33,6 @@ build-backend = "setuptools.build_meta"
 Homepage = "https://github.com/pypa/sampleproject"
 Issues = "https://github.com/pypa/sampleproject/issues"
 
-[tool.uv]
-exclude-dependencies = ["opencv-python"]
 
 [tool.uv.sources]
 dronekit = { url = "https://github.com/MissouriMRR/docs/raw/refs/heads/main/subteams/flight/installation_guide/dronekit-2.9.2-py310-none-any.whl" }
@@ -44,9 +51,8 @@ include = ["hawkspot*"]
 
 [dependency-groups]
 dev = [
-    "dt-apriltags>=3.1.7",
     "onnxruntime>=1.24.2",
-    "picamera2>=0.3.34",
+    "picamera2>=0.3.34 ; sys_platform == 'linux'",
     "pre-commit>=4.5.1",
     "ruff>=0.15.9",
     "siyi-sdk>=0.2.12",

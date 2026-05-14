@@ -1,0 +1,24 @@
+Metadata-Version: 2.4
+Name: hawkspot
+Version: 0.0.2
+Summary: Tracking objects using MAVLink
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/pypa/sampleproject
+Project-URL: Issues, https://github.com/pypa/sampleproject/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: ==3.12.*
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: dronekit @ https://github.com/MissouriMRR/docs/raw/refs/heads/main/subteams/flight/installation_guide/dronekit-2.9.2-py310-none-any.whl
+Requires-Dist: future>=1.0.0
+Requires-Dist: opencv-contrib-python>=4.13.0.92
+Requires-Dist: pupil-apriltags
+Dynamic: license-file
+
+# dronetrack
+
+This library aims to allow for plug-and-play precision loitering and landing for any autonomous drone using the dronekit library. You can use a combination of a variety of streams (onboard camera, IP stream), detectors (object detection models, april tag detectors), and trackers in order to find an object to locate and either loiter near or land on a given target.
+
+> [!CAUTION]
+> The Multirotor Design Team and it's members are not responsible for any damage done to vehicles or humans by drones using this library. It is your responsibility as a user to test this library's functionality in a safe and controlled environment before using it in a potentially dangerous setting.

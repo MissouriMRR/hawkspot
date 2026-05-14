@@ -1,8 +1,8 @@
 try:
-    from dt_apriltags import Detector
+    from pupil_apriltags   import Detector
 except ImportError:
     raise ImportError(
-        "dt_apriltags not installed. It is required for AprilTagDetector. Please install it with `pip install dt-apriltags`"
+        "pupil_apriltags not installed. It is required for AprilTagDetector. Please install it with `pip install dt-apriltags`"
     )
 
 import logging
@@ -19,7 +19,7 @@ class AprilTagDetector(BaseDetector):
     def __init__(
         self,
         detector: Detector = Detector(
-            searchpath=["apriltags"],
+            
             families="tag36h11",
             nthreads=1,
             quad_decimate=1.0,
