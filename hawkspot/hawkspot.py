@@ -168,7 +168,8 @@ class Hawkspot:
                 # Start moving to point
                 if not landing:
                     point = dronekit.LocationLocal(offset.forward, offset.right, 0)
-                    self.drone.goto_local(point)
+                    for i in range(10):
+                        self.drone.goto_local(point)
                 
 
                 # Send LANDING_TARGET message
