@@ -48,7 +48,7 @@ class Drone:
                 self.vehicle._master.target_system,  # Target system
                 self.vehicle._master.target_component,  # Target component
                 0b00000111,
-                self.to_quaternion(yaw=goal_yaw),  # Quaternion
+                goal_yaw,
                 0,  # Body roll rate in radian
                 0,  # Body pitch rate in radian
                 10,  # Body yaw rate in radian/second
