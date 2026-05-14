@@ -10,20 +10,24 @@ class Drone:
         self.vehicle = vehicle
 
     def goto_local(self, point: dronekit.LocationLocal):
-        logging.info("Going to point: forward=%s, right=%s", point.north, point.east)
-        msg = self.vehicle.message_factory.set_position_target_local_ned_encode(
-            0,       # time_boot_ms
-            0, 0,    # target_system, target_component
-            mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,
-            0b0000111111111000,  # position only (yaw ignored)
-            point.north,       # x: forward in body frame
-            point.east,         # y: right in body frame
-            0,                   # z: down (0 = same altitude)
-            0, 0, 0,             # velocity (ignored)
-            0, 0, 0,             # acceleration (ignored)
-            0, 0,                # yaw, yaw_rate (ignored)
+        self.vehicle._master.mav.set_position_target_local_ned_send(
+            0,  # time_boot_ms (not used)
+            self.vehicle._master.target_system,  # target_system
+            self.vehicle._master.target_component,  # target_component
+            mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,  # ty: ignore[unresolved-attribute]  # frame
+            0b0101111111111000,  # type_mask (only positions enabled)
+            point.north,
+            point.east,
+            0,  # x, y, z positions in meters (NED: negative z is up)
+            0,
+            0,
+            0,  # vx, vy, vz (ignored)
+            0,
+            0,
+            0,  # afx, afy, afz (ignored)
+            0,
+            0,  # yaw, yaw_rate (ignored)
         )
-        self.vehicle.send_mavlink(msg)
 
     def set_yaw(self, yaw: float):
         self.vehicle.message_factory.set_attitude_target_send(
