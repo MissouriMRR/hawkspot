@@ -119,7 +119,7 @@ class Hawkspot:
                     noDetectionCount+=1
                     logging.info(f"No detection found in frame. No detection count: {noDetectionCount}")
                     if noDetectionCount>20:
-                        logging.info("No detections for 10 frames, resetting tracker.")
+                        logging.info("No detections for 20 frames, resetting tracker.")
                         self._tracker_init = False
                         return False
             else:
