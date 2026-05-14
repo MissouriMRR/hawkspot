@@ -35,10 +35,10 @@ class Drone:
 
     def set_yaw(self, goal_yaw: float, yaw_threshold: float):
         
-        current_yaw: float = cast(float, self.drone.vehicle.attitude.yaw)
+        current_yaw: float = cast(float, self.vehicle.attitude.yaw)
         if(abs(goal_yaw - current_yaw) < yaw_threshold):
             while abs(goal_yaw - current_yaw) >= yaw_threshold:
-                current_yaw: float = cast(float, self.drone.vehicle.attitude.yaw)
+                current_yaw: float = cast(float, self.vehicle.attitude.yaw)
                 logging.debug(
                     f"yaw | offset={goal_yaw}, current={current_yaw}"
                 )
