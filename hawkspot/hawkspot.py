@@ -150,7 +150,7 @@ class Hawkspot:
                     # We are heading in the right direction, reset misdirection
                     current_yaw: float = cast(float, self.drone.vehicle.attitude.yaw)
                     acceptable_yaw = (
-                        abs(offset.yaw - current_yaw) < self.params.yaw_threshold
+                        abs(offset.yaw)-self.params.yaw_threshold <0 
                         if offset.yaw is not None
                         else True
                     )
