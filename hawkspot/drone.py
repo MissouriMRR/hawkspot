@@ -8,6 +8,7 @@ from pymavlink import mavutil
 class Drone:
     def __init__(self, vehicle: dronekit.Vehicle):
         self.vehicle = vehicle
+        self.yaw=0.0
 
     def goto_local(self, point: dronekit.LocationLocal):
         #current_yaw = self.vehicle.attitude.yaw  # radians, already in NED frame
