@@ -148,7 +148,9 @@ class Hawkspot:
                     else:
                         if(self.estimatedLocation!=None):
                             self.drone.vehicle.simple_goto(self.estimatedLocation.lat,self.estimatedLocation.long,self.drone.vehicle.location.global_relative_frame.alt)
-                        
+                        else:
+                            self.drone.vehicle.simple_goto(self.drone.vehicle.location.global_relative_frame.lat,self.drone.vehicle.location.global_relative_frame.long,self.drone.vehicle.location.global_relative_frame.alt)
+                            continue
 
                 offset.yaw += self.params.yaw_offset
                 logging.info(
