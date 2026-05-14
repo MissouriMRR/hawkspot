@@ -39,7 +39,7 @@ class Drone:
     
         while abs(goal_yaw - current_yaw) >= yaw_threshold:
             current_yaw: float = cast(float, self.vehicle.attitude.yaw)
-            logging.debug(
+            logging.info(
                 f"yaw | offset={goal_yaw}, current={current_yaw}"
             )
 
