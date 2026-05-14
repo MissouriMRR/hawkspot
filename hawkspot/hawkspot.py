@@ -168,6 +168,7 @@ class Hawkspot:
                 if not landing:
                     point = dronekit.LocationLocal(offset.forward, offset.right, 0)
                     self.drone.goto_local(point)
+                    return True
 
                 # Send LANDING_TARGET message
                 self.drone.send_landing_target(offset.right, offset.forward)
