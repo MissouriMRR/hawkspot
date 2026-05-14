@@ -14,7 +14,7 @@ class Drone:
             0,  # time_boot_ms (not used)
             self.vehicle._master.target_system,  # target_system
             self.vehicle._master.target_component,  # target_component
-            mavutil.mavlink.MAV_FRAME_LOCAL_OFFSET_NED,  # ty: ignore[unresolved-attribute]  # frame
+            mavutil.mavlink.MAV_FRAME_BODY_OFFSET_NED,  # ty: ignore[unresolved-attribute]  # frame
             0b0101111111111000,  # type_mask (only positions enabled)
             point.north,
             point.east,
