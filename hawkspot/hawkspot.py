@@ -170,7 +170,7 @@ class Hawkspot:
                     self.drone.goto_local(point)
 
                 # Send LANDING_TARGET message
-                self.drone.send_landing_target(-offset.right, -offset.forward)
+                self.drone.send_landing_target(offset.right, offset.forward)
 
                 # Adjust yaw if necessary
                 if offset.yaw is not None:
@@ -198,8 +198,9 @@ class Hawkspot:
     def land_on_object(self) -> dronekit.LocationGlobal:
         result = False
         while not result:
-            result = self._track_object(False)
             logging.info("_______________here______________________")
+            result = self._track_object(False)
+            
         logging.info(f"Object found @ {self.drone.vehicle.location.global_frame}, landing...")
         self.drone.vehicle.mode = dronekit.VehicleMode("LAND")
         self.drone.vehicle.wait_for_mode("LAND")
